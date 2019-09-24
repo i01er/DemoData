@@ -1,0 +1,298 @@
+<html>
+  <head>
+        <script src="./web3_bundle.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.37/dist/web3.min.js"></script> -->
+  </head>
+  <body>
+    <h2>Azure Blockchain Demo</h2>
+    <button id=”button_m1” class="button button_n" style="background-color: #3B8686;" onclick="member1()">Blockmember1</button>
+    <button id=”button_m2” class="button button_n" style="background-color: #79BD9A;" onclick="member2()">Blockmember2</button>
+    <button id=”button_m3” class="button button_n" style="background-color: #3B8686;" onclick="member3()">Blockmember3</button>
+    <h3>My Account</h3>
+    <p id="account">0x0</p>
+    <br>
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Hash</th>
+      <th>Amount</th>
+    </tr>
+    <tr>
+      <td id="id">none</td>
+      <td id="hash">none</td>
+      <td id="amount">none</td>
+    </tr>
+  </table>
+    
+    <br>
+    <button id=”button2” class="button button_n" style="background-color: #79BD9A; width: 30%;" onclick="checking()">Check Data</button>
+
+    <br><br><br>
+    <input type="text" id="f_id" name="fillid" placeholder="ID(String)" style="width: 100%;"><br><br>
+    <input type="text" id="f_hash" name="fillhash" placeholder="HASH(String)" style="width: 100%;"><br><br>
+    <input type="text" id="f_amount" name="fillamout" placeholder="AMOUNT(Number)" style="width: 100%;"><br><br>
+
+    <button id=”button” class="button button_n" style="background-color: #3B8686; width: 30%;" onclick="uploading()">Upload Data</button>
+
+    <br><br><br><br>
+    <input type="text" id="f_addr" name="filladdr" placeholder="ADDRESS" style="width: 100%;"><br><br>
+    <button id=”button” class="button button_n" style="background-color: #79BD9A; width: 30%;" onclick="adminchecking()">Admin Check</button>
+
+
+
+    <script>
+      var CONTRACT_ADDRESS = "0xE071368A5bCCf2963c69a14E418E3E51e147995E";
+
+      var CONTRACT_ABI = 
+      [
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "ChangeOwner",
+          "outputs": [],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "_id",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "_hash",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "_total",
+              "type": "uint256"
+            }
+          ],
+          "name": "Upload",
+          "outputs": [],
+          "payable": false,
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "_comp",
+              "type": "address"
+            }
+          ],
+          "name": "AdminGet",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "Get",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "OwnerAddress",
+          "outputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "payable": false,
+          "stateMutability": "view",
+          "type": "function"
+        }
+      ];
+
+      var ADDRESS = "0x0";
+
+      var _id;
+      var _hash;
+      var _amount;
+
+      // Get API version
+      console.log(web3.version);
+
+      var TheAccount = web3.eth.getAccounts();
+      var ACval = Promise.resolve(TheAccount);
+      ACval.then(function(ACval){(
+          document.getElementById("account").innerHTML = ACval[0]
+        )});
+
+      var TheContract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+
+
+      var ACC = async() => {
+        var ACCO = await web3.eth.getAccounts();
+        return ACCO[0];
+      }
+
+      // ACC().then(function(e){var ACCCC = e.toString()});
+      // console.log(ACCCC);
+
+      // var TheAcc = web3.eth.getAccounts();
+      // var ACva = Promise.resolve(TheAcc);
+      // ACva.then(function(ACva){(
+      //     web3.eth.defaultAccount = ACva[0]
+      // )});
+
+      // console.log("defaultAccount: " + web3.eth.defaultAccount);
+
+      // Get my MetaMask account
+      // var account = document.getElementById("account");
+      // console.log(web3.eth.getAccounts());
+      // account.innerHTML = web3.eth.accounts[0];
+      function member1(){
+        ADDRESS = "0xa5878029Fd6012643e91f54DA87D2F6BBF7ea11c";
+        console.log(ADDRESS);
+        document.getElementById("account").innerHTML = ADDRESS;
+      }
+
+      function member2(){
+        ADDRESS = "0x67C3a8812570119eC281195E3646b25BA1C772a6";
+        console.log(ADDRESS);
+        document.getElementById("account").innerHTML = ADDRESS;
+      }
+
+      function member3(){
+        ADDRESS = "0x636107e9da7E3592B39b09f91b5EF73CE35D2b92";
+        console.log(ADDRESS);
+        document.getElementById("account").innerHTML = ADDRESS;
+      }
+
+      function uploading(){
+        console.log("running the function");
+        _id = document.getElementsByName("fillid")[0].value;
+        _hash = document.getElementsByName("fillhash")[0].value;
+        _amount = document.getElementsByName("fillamout")[0].value;
+        TheContract.methods.Upload(_id, _hash, _amount).send({from: ADDRESS, gasPrice: "0"}).then(function(receipt){
+          console.log(receipt);
+        });
+        //TheContract.methods.UploadHash(777).send({from: "0x49a6cAAfd2fD3821D511b7A937FE7A35A2D88077"});
+        // console.log(method_call_abi);
+        console.log("hash uploaded");
+      }
+
+    function checking(){
+        console.log("running the function: checking");
+        var res = TheContract.methods.Get().call({from: ADDRESS});
+        var resVal = Promise.resolve(res);
+        resVal.then(function(resVal){(
+            document.getElementById("id").innerHTML = resVal[0],
+            document.getElementById("hash").innerHTML = resVal[1],
+            document.getElementById("amount").innerHTML = resVal[2]
+
+          )});
+    }
+
+    function adminchecking(){
+        console.log("running the function: adminchecking");
+        var _addr = document.getElementsByName("filladdr")[0].value;
+        var res = TheContract.methods.AdminGet(_addr).call({from: ADDRESS});
+        var resVal = Promise.resolve(res);
+        resVal.then(function(resVal){(
+            document.getElementById("id").innerHTML = resVal[0],
+            document.getElementById("hash").innerHTML = resVal[1],
+            document.getElementById("amount").innerHTML = resVal[2]
+
+          )});
+    }
+    </script>
+  </body>
+
+  <style type="text/css">
+      table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 25px;
+        font-size: 12px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        background-color: #0B486B;
+        border: none;
+        /*border-radius: 15px;*/
+        /*box-shadow: 0 9px #999;*/
+      }
+      .button:hover {background-color: #0B486B}
+      .button:active {
+        background-color: #0B486B;
+        /*box-shadow: 0 5px #666;*/
+        transform: translateY(4px);
+      }
+      .button_n {width: 30%;}
+      
+      .button_w {width: 10%;}
+      .input {width: 90%;}
+  </style>
+</html>
